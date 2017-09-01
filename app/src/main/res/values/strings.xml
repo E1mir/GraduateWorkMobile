@@ -1,3 +1,10 @@
 <resources>
-    <string name="app_name">GraduateWork</string>
+    <string name="app_name">WMS</string>
+    <string name="full_app_name">Warehouse Management System</string>
+    <string name="log_in">Log in</string>
+    <string name="username">Username</string>
+    <string name="password">Password</string>
+    <string name="register">New Account</string>
+    <string name="copyright">Created by Elmir I-de &#169;</string>
+    <string name="sign_in">Sign in</string>
 </resources>
