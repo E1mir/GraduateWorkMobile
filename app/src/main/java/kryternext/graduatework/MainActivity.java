@@ -5,6 +5,8 @@ import android.os.Bundle;
 import android.view.View;
 import android.widget.Toast;
 
+import kryternext.graduatework.app.DatabaseController;
+
 public class MainActivity extends AppCompatActivity {
 
     @Override
@@ -18,7 +20,12 @@ public class MainActivity extends AppCompatActivity {
     }
 
     public void logIn(View view) {
-        Toast.makeText(this, "Login", Toast.LENGTH_SHORT).show();
+        //Toast.makeText(this, "Login", Toast.LENGTH_SHORT).show();
+        try {
+            DatabaseController controller = new DatabaseController(this);
+        } catch (Exception e) {
+            Toast.makeText(this, e.getMessage(), Toast.LENGTH_SHORT).show();
+        }
     }
 
     public void register(View view) {
