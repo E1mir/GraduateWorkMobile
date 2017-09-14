@@ -7,4 +7,10 @@
     <string name="register">New Account</string>
     <string name="copyright">Created by Elmir I-de &#169;</string>
     <string name="sign_in">Sign in</string>
+    <string name="title_activity_account">Account</string>
+
+    <string name="navigation_drawer_open">Open navigation drawer</string>
+    <string name="navigation_drawer_close">Close navigation drawer</string>
+
+    <string name="action_settings">Settings</string>
 </resources>

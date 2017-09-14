@@ -1,6 +1,7 @@
 package kryternext.graduatework;
 
 import android.content.Context;
+import android.content.Intent;
 import android.support.annotation.NonNull;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v4.app.FragmentActivity;
@@ -49,6 +50,10 @@ public class MainActivity extends AppCompatActivity {
         boolean authUser = this.storage.logIn(user);
         if (authUser) {
             Toast.makeText(this, "SUCCESS", Toast.LENGTH_SHORT).show();
+            Intent intent = new Intent(this, AccountActivity.class);
+            usernameInput.setText("");
+            passwordInput.setText("");
+            startActivity(intent);
         } else {
             Toast.makeText(this, "LOL", Toast.LENGTH_SHORT).show();
         }
@@ -56,5 +61,6 @@ public class MainActivity extends AppCompatActivity {
 
     public void register(View view) {
         Toast.makeText(this, "Register", Toast.LENGTH_SHORT).show();
+
     }
 }
