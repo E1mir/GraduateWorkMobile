@@ -3,6 +3,7 @@ package kryternext.graduatework;
 import android.content.DialogInterface;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
+import android.support.constraint.ConstraintLayout;
 import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.Snackbar;
 import android.support.v7.app.AlertDialog;
@@ -18,6 +19,7 @@ import android.view.MenuItem;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import java.sql.Timestamp;
 import java.util.Locale;
 
 import kryternext.graduatework.app.models.User;
@@ -28,12 +30,15 @@ public class AccountActivity extends AppCompatActivity
     private TextView email;
     private MenuItem balance;
     private User user;
+    private Timestamp timestamp;
+    private ConstraintLayout content;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_account);
         user = (User) getIntent().getSerializableExtra("USER");
+        content = (ConstraintLayout) findViewById(R.id.contentAccount);
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
         FloatingActionButton fab = (FloatingActionButton) findViewById(R.id.fab);
@@ -43,7 +48,6 @@ public class AccountActivity extends AppCompatActivity
                 this, drawer, toolbar, R.string.navigation_drawer_open, R.string.navigation_drawer_close);
         drawer.addDrawerListener(toggle);
         toggle.syncState();
-
         NavigationView navigationView = (NavigationView) findViewById(R.id.nav_view);
         navigationView.setNavigationItemSelectedListener(this);
         View header = navigationView.getHeaderView(0);
@@ -80,13 +84,27 @@ public class AccountActivity extends AppCompatActivity
             // Handle the camera action
             return false;
         } else if (id == R.id.nav_info) {
+            final int N = 11; // total number of textviews to add
+            // create an empty array;
+            for (int i = 0; i <= N; i++) {
+                // create a new textview
+                final TextView rowTextView = new TextView(this);
+                // set some properties of rowTextView or something
+                rowTextView.setText("This is row #" + i + "\n");
+                content.addView(rowTextView);
+                // add the textview to the linearlayout
+                // save a reference to the textview for later
+            }
+
             fab.hide();
         } else if (id == R.id.nav_orders) {
             fab.show();
             fab.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View view) {
-                    Snackbar.make(view, "Will be added soon!", Snackbar.LENGTH_LONG).setAction("Action", null).show();
+                    timestamp = new Timestamp(System.currentTimeMillis());
+                    Snackbar.make(view, String.valueOf(timestamp), Snackbar.LENGTH_LONG)
+                            .setAction("Action", null).show();
                 }
             });
         } else if (id == R.id.nav_logout) {
