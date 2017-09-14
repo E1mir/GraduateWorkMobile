@@ -9,7 +9,6 @@ public class User implements Serializable {
     private String type;
     private double balance;
 
-
     public User() {
 
     }

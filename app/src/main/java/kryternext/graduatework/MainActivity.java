@@ -44,8 +44,8 @@ public class MainActivity extends AppCompatActivity {
         passwordInput.setText("");
     }
 
-    public void register(View view) {
-        Toast.makeText(this, "Register", Toast.LENGTH_SHORT).show();
-
+    public void registration(View view) {
+        Intent register = new Intent(this, Registration.class);
+        startActivity(register);
     }
 }

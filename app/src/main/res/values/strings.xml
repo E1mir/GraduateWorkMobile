@@ -7,6 +7,7 @@
     <string name="username">Username</string>
     <string name="password">Password</string>
     <string name="register">New Account</string>
+    <string name="registration">Registration</string>
     <string name="copyright">Created by Elmir I-de &#169;</string>
     <string name="sign_in">Sign in</string>
     <string name="title_activity_account">Account</string>
@@ -18,4 +19,12 @@
     <string name="menu_orders">Orders</string>
     <string name="menu_logout">Log out</string>
     <string name="menu_header_actions">Actions</string>
+    <string name="form_type_here_hint">Type here</string>
+    <string name="form_password_hint">••••••••••</string>
+    <string name="form_username">Username: </string>
+    <string name="form_password">Password: </string>
+    <string name="form_email">Email: </string>
+    <string name="form_type">Type: </string>
+    <string name="form_shop">Shop: </string>
+    <string name="action_register_button">Register</string>
 </resources>

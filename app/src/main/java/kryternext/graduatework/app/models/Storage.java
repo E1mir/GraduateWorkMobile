@@ -1,21 +1,13 @@
 package kryternext.graduatework.app.models;
 
-import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
 import android.support.annotation.NonNull;
-import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
 import android.widget.Toast;
 
 import com.google.android.gms.tasks.Continuation;
-import com.google.android.gms.tasks.OnCompleteListener;
-import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.android.gms.tasks.Task;
-import com.mongodb.BasicDBList;
-import com.mongodb.BasicDBObject;
-import com.mongodb.client.FindIterable;
-import com.mongodb.stitch.android.services.mongodb.MongoClient;
 
 import org.bson.Document;
 
@@ -23,8 +15,7 @@ import java.util.LinkedList;
 import java.util.List;
 
 import kryternext.graduatework.AccountActivity;
-import kryternext.graduatework.MainActivity;
-import kryternext.graduatework.app.DatabaseController;
+import kryternext.graduatework.app.services.DatabaseController;
 
 public class Storage {
     private DatabaseController storage;
@@ -36,7 +27,7 @@ public class Storage {
         this.storage = new DatabaseController(context, databaseName);
     }
 
-    public boolean logIn(final UserAuth user) {
+    public void logIn(final UserAuth user) {
         List<Document> orCondition = new LinkedList<>();
         orCondition.add(new Document("username", user.getUsername()));
         orCondition.add(new Document("email", user.getUsername()));
@@ -63,20 +54,29 @@ public class Storage {
                             context.startActivity(intent);
                             return true;
                         } else {
-                            Toast.makeText(context, "Incorrect username or password!", Toast.LENGTH_SHORT).show();
+                            showMessage(context);
                             Log.i(TAG, "Incorrect username or password!");
                             return false;
                         }
                     } else {
+                        showMessage(context);
                         Log.i(TAG, "Account not found!");
                         return false;
                     }
                 } else {
+                    showMessage(context);
                     Log.e(TAG, "Something went wrong!");
                     return false;
                 }
             }
         });
+    }
+
+    private void showMessage(Context context) {
+        Toast.makeText(context, "Incorrect username or password!", Toast.LENGTH_SHORT).show();
+    }
+
+    public boolean register() {
         return true;
     }
 }

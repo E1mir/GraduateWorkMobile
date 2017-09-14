@@ -1,6 +1,8 @@
 package kryternext.graduatework.app.models;
 
 
+import android.support.annotation.NonNull;
+
 public class UserAuth {
     private String username;
     private String password;

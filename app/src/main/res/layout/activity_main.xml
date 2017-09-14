@@ -62,8 +62,11 @@
         android:layout_centerHorizontal="true"
         android:layout_marginTop="10dp"
         android:width="200dp"
+        android:background="@color/colorPrimary"
         android:onClick="logIn"
-        android:text="@string/log_in" />
+        android:text="@string/log_in"
+        android:textColor="#fff"
+        android:textSize="15sp" />
 
     <Button
         android:id="@+id/registrationButton"
@@ -71,10 +74,13 @@
         android:layout_height="wrap_content"
         android:layout_below="@id/logInButton"
         android:layout_centerHorizontal="true"
-        android:layout_marginTop="6dp"
+        android:layout_marginTop="10dp"
         android:width="200dp"
-        android:onClick="register"
-        android:text="@string/register" />
+        android:background="@color/colorPrimary"
+        android:onClick="registration"
+        android:text="@string/register"
+        android:textColor="#fff"
+        android:textSize="15sp" />
 
     <TextView
         android:id="@+id/copyright"
