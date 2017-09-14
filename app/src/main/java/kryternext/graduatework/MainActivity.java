@@ -1,20 +1,13 @@
 package kryternext.graduatework;
 
-import android.content.Context;
 import android.content.Intent;
-import android.support.annotation.NonNull;
 import android.support.v7.app.AppCompatActivity;
-import android.support.v4.app.FragmentActivity;
 import android.os.Bundle;
-import android.util.Log;
 import android.view.View;
 import android.widget.EditText;
 import android.widget.Toast;
 
-import org.bson.Document;
-
 import kryternext.graduatework.app.models.Storage;
-import kryternext.graduatework.app.models.User;
 import kryternext.graduatework.app.models.UserAuth;
 
 public class MainActivity extends AppCompatActivity {
@@ -47,16 +40,8 @@ public class MainActivity extends AppCompatActivity {
             return;
         }
         UserAuth user = new UserAuth(username, password);
-        boolean authUser = this.storage.logIn(user);
-        if (authUser) {
-            Toast.makeText(this, "SUCCESS", Toast.LENGTH_SHORT).show();
-            Intent intent = new Intent(this, AccountActivity.class);
-            usernameInput.setText("");
-            passwordInput.setText("");
-            startActivity(intent);
-        } else {
-            Toast.makeText(this, "LOL", Toast.LENGTH_SHORT).show();
-        }
+        this.storage.logIn(user);
+        passwordInput.setText("");
     }
 
     public void register(View view) {

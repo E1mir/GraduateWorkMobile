@@ -1,24 +1,17 @@
 package kryternext.graduatework.app.models;
 
-public class User {
+import java.io.Serializable;
+
+public class User implements Serializable {
     private String username;
     private String email;
     private String shopName;
     private String type;
     private double balance;
 
-    private boolean isAuthorized;
 
     public User() {
-        isAuthorized = true;
-    }
 
-    public boolean isAuthorized() {
-        return isAuthorized;
-    }
-
-    public void setAuthorized(boolean authorized) {
-        isAuthorized = authorized;
     }
 
     public String getUsername() {
@@ -53,7 +46,6 @@ public class User {
         this.shopName = shopName;
     }
 
-
     public void setType(String type) {
         this.type = type;
     }
@@ -62,4 +54,8 @@ public class User {
         this.balance = balance;
     }
 
+    @Override
+    public String toString() {
+        return String.format("%s - %s", username, email);
+    }
 }

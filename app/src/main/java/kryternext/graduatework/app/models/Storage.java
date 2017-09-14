@@ -1,7 +1,10 @@
 package kryternext.graduatework.app.models;
 
+import android.app.Activity;
 import android.content.Context;
+import android.content.Intent;
 import android.support.annotation.NonNull;
+import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
 import android.widget.Toast;
 
@@ -19,6 +22,8 @@ import org.bson.Document;
 import java.util.LinkedList;
 import java.util.List;
 
+import kryternext.graduatework.AccountActivity;
+import kryternext.graduatework.MainActivity;
 import kryternext.graduatework.app.DatabaseController;
 
 public class Storage {
@@ -47,8 +52,18 @@ public class Storage {
                         String requestPass = user.getPassword();
                         if (databasePass.equals(requestPass)) {
                             Log.i(TAG, "Authorized!");
+                            Intent intent = new Intent(Storage.this.context, AccountActivity.class);
+                            User authorizedUser = new User();
+                            authorizedUser.setUsername(account.getString("username"));
+                            authorizedUser.setEmail(account.getString("email"));
+                            authorizedUser.setShopName(account.getString("shop_name"));
+                            authorizedUser.setType(account.getString("type"));
+                            authorizedUser.setBalance(account.getDouble("balance"));
+                            intent.putExtra("USER", authorizedUser);
+                            context.startActivity(intent);
                             return true;
                         } else {
+                            Toast.makeText(context, "Incorrect username or password!", Toast.LENGTH_SHORT).show();
                             Log.i(TAG, "Incorrect username or password!");
                             return false;
                         }

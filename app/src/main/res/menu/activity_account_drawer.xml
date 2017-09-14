@@ -4,28 +4,26 @@
         <item
             android:id="@+id/nav_balance"
             android:icon="@drawable/ic_menu_money"
-            android:title="Balance: 0 AZN" />
+            android:title="@string/menu_balance" />
     </group>
     <group android:checkableBehavior="single">
         <item
             android:id="@+id/nav_info"
             android:icon="@drawable/ic_menu_info"
-            android:title="Account info" />
+            android:title="@string/menu_account" />
         <item
             android:id="@+id/nav_orders"
             android:icon="@drawable/ic_menu_orders"
-            android:title="Orders" />
+            android:title="@string/menu_orders" />
 
     </group>
 
-    <item android:title="Actions">
+    <item android:title="@string/menu_header_actions">
         <menu>
             <item
                 android:id="@+id/nav_logout"
                 android:icon="@drawable/ic_exit"
-                android:title="Log out" />
-
+                android:title="@string/menu_logout" />
         </menu>
     </item>
-
 </menu>
