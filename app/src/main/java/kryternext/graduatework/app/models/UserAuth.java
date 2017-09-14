@@ -8,7 +8,7 @@ public class UserAuth {
     private String password;
 
     public UserAuth(String username, String password) {
-        this.username = username;
+        this.username = username.toLowerCase();
         this.password = encryptPass(password);
     }
 
@@ -20,7 +20,7 @@ public class UserAuth {
         return password;
     }
 
-    private String encryptPass(String password) {
+    static String encryptPass(String password) {
         StringBuilder encryptedPassword = new StringBuilder("");
         for (char ch : password.toCharArray()) {
             int decryptedCharId = (int) ch;

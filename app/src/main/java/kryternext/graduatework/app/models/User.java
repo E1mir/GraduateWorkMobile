@@ -8,9 +8,9 @@ public class User implements Serializable {
     private String shopName;
     private String type;
     private double balance;
+    private String password;
 
     public User() {
-
     }
 
     public String getUsername() {
@@ -51,6 +51,14 @@ public class User implements Serializable {
 
     public void setBalance(double balance) {
         this.balance = balance;
+    }
+
+    public void setPassword(String password) {
+        this.password = UserAuth.encryptPass(password);
+    }
+
+    public String getPassword() {
+        return password;
     }
 
     @Override

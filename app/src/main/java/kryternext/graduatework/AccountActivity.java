@@ -1,15 +1,11 @@
 package kryternext.graduatework;
 
 import android.content.DialogInterface;
-import android.content.Intent;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
-import android.support.annotation.StringDef;
 import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.Snackbar;
 import android.support.v7.app.AlertDialog;
-import android.text.AndroidCharacter;
-import android.util.Log;
 import android.view.View;
 import android.support.design.widget.NavigationView;
 import android.support.v4.view.GravityCompat;
@@ -55,9 +51,7 @@ public class AccountActivity extends AppCompatActivity
         greeting = (TextView) header.findViewById(R.id.nav_greeting);
         email = (TextView) header.findViewById(R.id.nav_email);
         balance = menu.findItem(R.id.nav_balance);
-        balance.setTitle(String.format(Locale.ENGLISH, "Balance: %.2f $", user.getBalance()));
-        greeting.setText(String.format("Welcome %s", user.getUsername()));
-        email.setText(user.getEmail());
+        initHeader();
     }
 
     @Override
@@ -68,6 +62,12 @@ public class AccountActivity extends AppCompatActivity
         } else {
             super.onBackPressed();
         }
+    }
+
+    private void initHeader() {
+        balance.setTitle(String.format(Locale.ENGLISH, "Balance: %.2f $", user.getBalance()));
+        greeting.setText(String.format("Welcome %s", user.getUsername()));
+        email.setText(user.getEmail());
     }
 
     @SuppressWarnings("StatementWithEmptyBody")
@@ -86,8 +86,7 @@ public class AccountActivity extends AppCompatActivity
             fab.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View view) {
-                    Snackbar.make(view, "Will be added soon!", Snackbar.LENGTH_LONG)
-                            .setAction("Action", null).show();
+                    Snackbar.make(view, "Will be added soon!", Snackbar.LENGTH_LONG).setAction("Action", null).show();
                 }
             });
         } else if (id == R.id.nav_logout) {

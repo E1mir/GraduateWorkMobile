@@ -157,9 +157,10 @@
             <Spinner
                 android:id="@+id/typeSpinner"
                 android:layout_width="200dp"
-                android:layout_height="wrap_content"
+                android:layout_height="26dp"
                 android:layout_alignParentEnd="true"
-                android:layout_toEndOf="@id/typeTextView">
+                android:layout_toEndOf="@id/typeTextView"
+                android:textAlignment="center">
 
             </Spinner>
         </RelativeLayout>
@@ -177,11 +178,10 @@
                 android:layout_alignParentBottom="true"
                 android:background="@color/colorPrimary"
                 android:backgroundTintMode="src_over"
+                android:onClick="register"
                 android:text="@string/action_register_button"
                 android:textColor="#fff"
-                android:textSize="15sp"
-                android:onClick="register"
-                />
+                android:textSize="15sp" />
         </RelativeLayout>
 
 
