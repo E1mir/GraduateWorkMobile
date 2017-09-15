@@ -3,7 +3,6 @@ package kryternext.graduatework;
 import android.content.DialogInterface;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
-import android.support.constraint.ConstraintLayout;
 import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.Snackbar;
 import android.support.v7.app.AlertDialog;
@@ -16,6 +15,8 @@ import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.widget.RelativeLayout;
+import android.widget.TableLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -31,15 +32,17 @@ public class AccountActivity extends AppCompatActivity
     private MenuItem balance;
     private User user;
     private Timestamp timestamp;
-    private ConstraintLayout content;
+    private RelativeLayout mainGreeting;
+    private TableLayout accountInfo;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_account);
         user = (User) getIntent().getSerializableExtra("USER");
-        content = (ConstraintLayout) findViewById(R.id.contentAccount);
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
+        mainGreeting = (RelativeLayout) findViewById(R.id.main_content_layout);
+        accountInfo = (TableLayout) findViewById(R.id.account_content_layout);
         setSupportActionBar(toolbar);
         FloatingActionButton fab = (FloatingActionButton) findViewById(R.id.fab);
         fab.hide();
@@ -84,20 +87,31 @@ public class AccountActivity extends AppCompatActivity
             // Handle the camera action
             return false;
         } else if (id == R.id.nav_info) {
-            final int N = 11; // total number of textviews to add
-            // create an empty array;
-            for (int i = 0; i <= N; i++) {
-                // create a new textview
-                final TextView rowTextView = new TextView(this);
-                // set some properties of rowTextView or something
-                rowTextView.setText("This is row #" + i + "\n");
-                content.addView(rowTextView);
-                // add the textview to the linearlayout
-                // save a reference to the textview for later
-            }
-
+            //LinearLayout accountInfoLayout = (LinearLayout) findViewById(R.id.account_information_content_layout);
+            mainGreeting.setVisibility(RelativeLayout.INVISIBLE);
+            accountInfo.setVisibility(TableLayout.VISIBLE);
+            String username = user.getUsername();
+            String email = user.getEmail();
+            String shop = user.getShopName();
+            String type = user.getType();
+            String orders = "0";
+            String balance = String.format(Locale.ENGLISH, "%.2f $", user.getBalance());
+            TextView usernameTV = (TextView) findViewById(R.id.account_username_USER);
+            TextView emailTV = (TextView) findViewById(R.id.account_email_USER);
+            TextView shopTV = (TextView) findViewById(R.id.account_shop_USER);
+            TextView typeTV = (TextView) findViewById(R.id.account_type_USER);
+            TextView ordersTV = (TextView) findViewById(R.id.account_orders_USER);
+            TextView balanceTV = (TextView) findViewById(R.id.account_balance_USER);
+            usernameTV.setText(getFormattedText("Username", username));
+            emailTV.setText(getFormattedText("Email", email));
+            shopTV.setText(getFormattedText("Shop", shop));
+            typeTV.setText(getFormattedText("Type", type));
+            ordersTV.setText(getFormattedText("Orders", orders));
+            balanceTV.setText(balance);
             fab.hide();
         } else if (id == R.id.nav_orders) {
+            accountInfo.setVisibility(TableLayout.INVISIBLE);
+            mainGreeting.setVisibility(RelativeLayout.INVISIBLE);
             fab.show();
             fab.setOnClickListener(new View.OnClickListener() {
                 @Override
@@ -123,5 +137,16 @@ public class AccountActivity extends AppCompatActivity
         DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
         drawer.closeDrawer(GravityCompat.START);
         return true;
+    }
+
+    private String getCapitalizedText(String text) {
+        StringBuilder builder = new StringBuilder();
+        builder.append(text.trim());
+        builder.setCharAt(0, Character.toUpperCase(builder.charAt(0)));
+        return builder.toString();
+    }
+
+    private String getFormattedText(String field, String text) {
+        return String.format("%s: %s", field, getCapitalizedText(text));
     }
 }

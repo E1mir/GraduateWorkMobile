@@ -1,6 +1,7 @@
 package kryternext.graduatework;
 
 import android.content.Intent;
+import android.support.design.widget.Snackbar;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.view.View;
@@ -9,11 +10,13 @@ import android.widget.Toast;
 
 import kryternext.graduatework.app.models.Storage;
 import kryternext.graduatework.app.models.UserAuth;
+import kryternext.graduatework.app.services.CheckNetwork;
 
 public class MainActivity extends AppCompatActivity {
     private Storage storage;
     private EditText usernameInput;
     private EditText passwordInput;
+    private boolean isConnected;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -32,20 +35,39 @@ public class MainActivity extends AppCompatActivity {
         String username = usernameInput.getText().toString();
         String password = passwordInput.getText().toString();
         if (username.isEmpty()) {
-            Toast.makeText(this, "Username field is empty!", Toast.LENGTH_SHORT).show();
+            fieldAlert(view, "Username");
             return;
         }
         if (password.isEmpty()) {
-            Toast.makeText(this, "Password field is empty!", Toast.LENGTH_SHORT).show();
+            fieldAlert(view, "Password");
             return;
         }
         UserAuth user = new UserAuth(username, password);
-        this.storage.logIn(user);
-        passwordInput.setText("");
+        isConnected = CheckNetwork.isInternetAvailable(this);
+        if (isConnected) {
+            this.storage.logIn(user);
+            passwordInput.setText("");
+        } else {
+            noInternetConnectionAlert(view);
+        }
     }
 
     public void registration(View view) {
-        Intent register = new Intent(this, Registration.class);
-        startActivity(register);
+        isConnected = CheckNetwork.isInternetAvailable(this);
+        if (isConnected) {
+            Intent register = new Intent(this, Registration.class);
+            startActivity(register);
+        } else {
+            noInternetConnectionAlert(view);
+        }
+    }
+
+    private void noInternetConnectionAlert(View view) {
+        Snackbar.make(view, "No internet connection!", Snackbar.LENGTH_LONG).setAction("Action", null).show();
+
+    }
+
+    void fieldAlert(View view, String field) {
+        Snackbar.make(view, String.format("%s field is empty!", field), Snackbar.LENGTH_LONG).setAction("Action", null).show();
     }
 }

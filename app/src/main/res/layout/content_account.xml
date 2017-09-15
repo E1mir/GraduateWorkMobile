@@ -1,12 +1,164 @@
 <?xml version="1.0" encoding="utf-8"?>
-<android.support.constraint.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
-    android:id="@+id/contentAccount"
+    android:id="@+id/navigation_menu_content"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     app:layout_behavior="@string/appbar_scrolling_view_behavior"
     tools:context="kryternext.graduatework.AccountActivity"
     tools:showIn="@layout/app_bar_account">
 
-</android.support.constraint.ConstraintLayout>
+    <RelativeLayout
+        android:id="@+id/main_content_layout"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_centerHorizontal="true"
+        android:layout_centerVertical="true"
+        android:visibility="invisible">
+
+        <TextView
+            android:id="@+id/main_greeting"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_centerHorizontal="true"
+            android:layout_marginTop="100dp"
+            android:text="@string/login_main_greeting"
+            android:textAlignment="center"
+            android:textColor="#FF2F2F2F"
+            android:textSize="56sp" />
+
+        <ImageView
+            android:id="@+id/greeting_logo"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_below="@id/main_greeting"
+            android:layout_centerHorizontal="true"
+            android:layout_marginTop="50dp"
+            android:contentDescription="@string/logo_desc"
+            android:scaleX="3"
+            android:scaleY="3"
+            android:src="@mipmap/greeting_logo" />
+    </RelativeLayout>
+
+    <TableLayout
+        android:id="@+id/account_content_layout"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_centerVertical="true"
+        android:layout_marginLeft="16dp"
+        android:layout_marginRight="16dp"
+        android:layout_marginTop="16dp"
+        android:stretchColumns="1"
+        android:visibility="invisible">
+
+        <TableRow>
+
+            <TextView
+                android:id="@+id/menu_account_TextView"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center_horizontal"
+                android:layout_span="2"
+                android:drawableStart="@drawable/ic_menu_info"
+                android:gravity="center"
+                android:text="@string/menu_account_text_view"
+                android:textColor="#000"
+                android:textSize="45sp" />
+        </TableRow>
+
+        <TableRow android:layout_marginTop="35sp">
+
+            <TextView
+                android:id="@+id/account_username_USER"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_span="2"
+                android:gravity="start"
+                android:text="@string/example"
+                android:textAlignment="center"
+                android:textColor="@color/colorPrimaryDark"
+                android:textSize="20sp" />
+        </TableRow>
+
+        <TableRow android:layout_marginTop="35sp">
+
+            <TextView
+                android:id="@+id/account_email_USER"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_span="2"
+                android:gravity="start"
+                android:text="@string/example"
+                android:textAlignment="center"
+                android:textColor="@color/colorPrimaryDark"
+                android:textSize="20sp" />
+        </TableRow>
+
+        <TableRow android:layout_marginTop="35sp">
+
+            <TextView
+                android:id="@+id/account_shop_USER"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_span="2"
+                android:gravity="start"
+                android:text="@string/example"
+                android:textAlignment="center"
+                android:textColor="@color/colorPrimaryDark"
+                android:textSize="20sp" />
+        </TableRow>
+
+        <TableRow android:layout_marginTop="35sp">
+
+            <TextView
+                android:id="@+id/account_type_USER"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_span="2"
+                android:gravity="start"
+                android:text="@string/example"
+                android:textAlignment="center"
+                android:textColor="@color/colorPrimaryDark"
+                android:textSize="20sp" />
+        </TableRow>
+
+        <TableRow android:layout_marginTop="35sp">
+
+            <TextView
+                android:id="@+id/account_orders_USER"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_span="2"
+                android:gravity="start"
+                android:text="@string/example"
+                android:textAlignment="center"
+                android:textColor="@color/colorPrimaryDark"
+                android:textSize="20sp" />
+        </TableRow>
+
+        <TableRow android:layout_marginTop="35sp">
+
+            <TextView
+                android:id="@+id/account_balance_USER"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_span="2"
+                android:gravity="start"
+                android:text="@string/example"
+                android:textAlignment="center"
+                android:textColor="@color/colorPrimaryDark"
+                android:textSize="40sp" />
+
+        </TableRow>
+
+    </TableLayout>
+
+    <ListView
+        android:id="@+id/orders_content_layout"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:visibility="invisible">
+
+    </ListView>
+</RelativeLayout>
