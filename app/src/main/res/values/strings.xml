@@ -32,4 +32,6 @@
     <string name="action_register_button">Register</string>
     <string name="example">Example</string>
     <string name="total">Total:</string>
+    <string name="plus">+</string>
+    <string name="minus">-</string>
 </resources>

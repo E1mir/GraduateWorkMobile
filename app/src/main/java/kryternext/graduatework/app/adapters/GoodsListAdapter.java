@@ -9,6 +9,7 @@ import android.widget.BaseAdapter;
 import android.widget.TextView;
 
 import java.util.List;
+import java.util.Locale;
 
 import kryternext.graduatework.R;
 import kryternext.graduatework.app.models.Product;
@@ -42,12 +43,16 @@ public class GoodsListAdapter extends BaseAdapter {
     @Override
     public View getView(int position, View convertView, ViewGroup parent) {
 
-        View vi = convertView;
+        View productRow = convertView;
         Product product = products.get(position);
-        if (vi == null)
-            vi = inflater.inflate(R.layout.product_row, parent, false);
-        TextView text = (TextView) vi.findViewById(R.id.productName);
-        text.setText(product.getProductName());
-        return vi;
+        if (productRow == null)
+            productRow = inflater.inflate(R.layout.product_row, parent, false);
+        TextView name = (TextView) productRow.findViewById(R.id.productName);
+        TextView price = (TextView) productRow.findViewById(R.id.productPrice);
+        TextView count = (TextView) productRow.findViewById(R.id.productCount);
+        name.setText(String.format(Locale.ENGLISH, "%d: %s", (position + 1), product.getProductName()));
+        price.setText(String.format(Locale.ENGLISH, "%.2f$", product.getPrice()));
+        count.setText(String.format(Locale.ENGLISH, "%d", product.getCount()));
+        return productRow;
     }
 }
