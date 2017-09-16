@@ -6,11 +6,13 @@ import android.support.annotation.NonNull;
 import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
 import android.widget.ArrayAdapter;
+import android.widget.ListView;
 import android.widget.Spinner;
 import android.widget.Toast;
 
 import com.google.android.gms.tasks.Continuation;
 import com.google.android.gms.tasks.Task;
+import com.mongodb.stitch.android.services.mongodb.MongoClient;
 
 import org.bson.Document;
 
@@ -20,8 +22,12 @@ import java.util.LinkedList;
 import java.util.List;
 
 import kryternext.graduatework.AccountActivity;
+import kryternext.graduatework.app.adapters.GoodsListAdapter;
 import kryternext.graduatework.app.services.DatabaseController;
 
+/**
+ * This is storage class, which using for interact application with database.
+ */
 public class Storage {
     private DatabaseController storage;
     private Context context;
@@ -31,10 +37,6 @@ public class Storage {
     public Storage(Context context, String databaseName) {
         this.context = context;
         this.storage = new DatabaseController(context, databaseName);
-    }
-
-    public void setActivity(AppCompatActivity activity) {
-        this.activity = activity;
     }
 
     public void logIn(final UserAuth user) {
@@ -82,10 +84,6 @@ public class Storage {
         });
     }
 
-    private void showMessage(Context context) {
-        Toast.makeText(context, "Incorrect username or password!", Toast.LENGTH_SHORT).show();
-    }
-
     public void getTypes(final Spinner spinner) {
         Document none = new Document();
         this.storage.getCollection("types").find(none).continueWith(new Continuation<List<Document>, Object>() {
@@ -107,10 +105,6 @@ public class Storage {
                 return null;
             }
         });
-    }
-
-    public DatabaseController getMainStorage() {
-        return this.storage;
     }
 
     public void register(final User newUser) {
@@ -156,6 +150,44 @@ public class Storage {
                 return null;
             }
         });
+    }
+
+    public DatabaseController getMainStorage() {
+        return this.storage;
+    }
+
+    public void getGoodsByType(String type, final ListView products) {
+        Document query = new Document();
+        query.append("type", type);
+        query.append("count", new Document("$gt", 0));
+        this.storage.getCollection("warehouse").find(query).continueWith(new Continuation<List<Document>, Object>() {
+            @Override
+            public Object then(@NonNull Task<List<Document>> task) throws Exception {
+                if (task.isSuccessful()) {
+                    List<Document> warehouse = task.getResult();
+                    ArrayList<Product> availableProducts = new ArrayList<>();
+                    for (Document product : warehouse) {
+                        Product newProduct = new Product();
+                        newProduct.setProductName(product.getString("name"));
+                        newProduct.setProductType(product.getString("type"));
+                        newProduct.setProductDescription(product.getString("description"));
+                        newProduct.setCount(product.getInteger("count"));
+                        newProduct.setPrice(product.getDouble("price"));
+                        availableProducts.add(newProduct);
+                    }
+                    products.setAdapter(new GoodsListAdapter(context, availableProducts));
+                }
+                return null;
+            }
+        });
+    }
+
+    public void setActivity(AppCompatActivity activity) {
+        this.activity = activity;
+    }
+
+    private void showMessage(Context context) {
+        Toast.makeText(context, "Incorrect username or password!", Toast.LENGTH_SHORT).show();
     }
 
     private void alert(String message) {

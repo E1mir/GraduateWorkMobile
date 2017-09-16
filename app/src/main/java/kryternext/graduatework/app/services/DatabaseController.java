@@ -19,21 +19,21 @@ import org.bson.Document;
 
 import java.util.List;
 
-
-public class DatabaseController {
+/**
+ * This class controller used for connect to database, getting, saving data from it.
+ */
+public class DatabaseController implements MongoDB {
     private static final String APP_ID = "wms-bjlte"; //The Stitch Application ID
     private static final String TAG = "STITCH-SDK";
     private static final String MONGODB_SERVICE_NAME = "mongodb-atlas";
 
     private Database database;
     private StitchClient client;
-    private Context context;
 
     public DatabaseController(Context context, String databaseName) {
         client = new StitchClient(context, APP_ID);
         MongoClient mongoClient = new MongoClient(client, MONGODB_SERVICE_NAME);
         this.database = mongoClient.getDatabase(databaseName);
-        this.context = context;
         doAnonymousAuthentication();
     }
 
@@ -67,7 +67,6 @@ public class DatabaseController {
         Log.i(TAG, "Try to insert!");
         if (!client.isAuthenticated()) {
             Log.e(TAG, "Account didn't authorized!");
-            return;
         } else {
             Log.i(TAG, "New insert document: " + newDocument.toString());
             this.database.getCollection(collection).insertOne(newDocument).continueWith(
@@ -75,7 +74,7 @@ public class DatabaseController {
                         @Override
                         public List<Document> then(@NonNull Task<Void> task) throws Exception {
                             if (task.isSuccessful()) {
-                                Log.i(TAG, "Document " + newDocument.toString() + " added!");
+                                Log.i(TAG, "Document added!");
                             } else {
                                 Log.e(TAG, "Error inserting document");
                             }

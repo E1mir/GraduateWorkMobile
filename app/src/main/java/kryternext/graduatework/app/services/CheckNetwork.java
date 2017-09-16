@@ -6,6 +6,9 @@ import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
 import android.util.Log;
 
+/**
+ * This class used for getting info about connection.
+ */
 public class CheckNetwork {
     private static final String TAG = CheckNetwork.class.getSimpleName();
 

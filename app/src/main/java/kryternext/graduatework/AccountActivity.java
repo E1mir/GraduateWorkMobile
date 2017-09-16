@@ -1,6 +1,7 @@
 package kryternext.graduatework;
 
 import android.content.DialogInterface;
+import android.content.Intent;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.design.widget.FloatingActionButton;
@@ -24,6 +25,7 @@ import java.sql.Timestamp;
 import java.util.Locale;
 
 import kryternext.graduatework.app.models.User;
+import kryternext.graduatework.app.services.StringUtils;
 
 public class AccountActivity extends AppCompatActivity
         implements NavigationView.OnNavigationItemSelectedListener {
@@ -113,12 +115,16 @@ public class AccountActivity extends AppCompatActivity
             accountInfo.setVisibility(TableLayout.INVISIBLE);
             mainGreeting.setVisibility(RelativeLayout.INVISIBLE);
             fab.show();
+
             fab.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View view) {
-                    timestamp = new Timestamp(System.currentTimeMillis());
-                    Snackbar.make(view, String.valueOf(timestamp), Snackbar.LENGTH_LONG)
-                            .setAction("Action", null).show();
+                    Intent intent = new Intent(AccountActivity.this, NewOrder.class);
+                    intent.putExtra("accountType", user.getType());
+                    startActivity(intent);
+                    //timestamp = new Timestamp(System.currentTimeMillis());
+                    //timestamp.getTime();
+                    //Snackbar.make(view, String.valueOf(timestamp), Snackbar.LENGTH_LONG).setAction("Action", null).show();
                 }
             });
         } else if (id == R.id.nav_logout) {
@@ -139,14 +145,7 @@ public class AccountActivity extends AppCompatActivity
         return true;
     }
 
-    private String getCapitalizedText(String text) {
-        StringBuilder builder = new StringBuilder();
-        builder.append(text.trim());
-        builder.setCharAt(0, Character.toUpperCase(builder.charAt(0)));
-        return builder.toString();
-    }
-
     private String getFormattedText(String field, String text) {
-        return String.format("%s: %s", field, getCapitalizedText(text));
+        return String.format("%s: %s", field, StringUtils.getCapitalizedText(text));
     }
 }

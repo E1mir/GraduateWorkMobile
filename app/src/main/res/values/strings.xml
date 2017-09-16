@@ -31,4 +31,5 @@
     <string name="form_orders">Orders: </string>
     <string name="action_register_button">Register</string>
     <string name="example">Example</string>
+    <string name="total">Total:</string>
 </resources>

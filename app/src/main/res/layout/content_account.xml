@@ -15,7 +15,7 @@
         android:layout_height="match_parent"
         android:layout_centerHorizontal="true"
         android:layout_centerVertical="true"
-        android:visibility="invisible">
+        android:visibility="visible">
 
         <TextView
             android:id="@+id/main_greeting"
