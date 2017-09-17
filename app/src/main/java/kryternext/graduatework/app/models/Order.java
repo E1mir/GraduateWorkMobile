@@ -1,5 +1,8 @@
 package kryternext.graduatework.app.models;
 
+import java.util.HashMap;
+import java.util.Map;
+
 public class Order {
     private long orderTimestamp;
     private long confirmTimestamp;
@@ -7,6 +10,7 @@ public class Order {
     private String confirmedDate;
     private User user;
     private double cost;
+    public static Map<String, Integer> order = new HashMap<>();
     private boolean isConfirmed;
 
     public Order() {

@@ -8,11 +8,11 @@ import android.util.Log;
 import android.widget.ArrayAdapter;
 import android.widget.ListView;
 import android.widget.Spinner;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import com.google.android.gms.tasks.Continuation;
 import com.google.android.gms.tasks.Task;
-import com.mongodb.stitch.android.services.mongodb.MongoClient;
 
 import org.bson.Document;
 
@@ -156,7 +156,7 @@ public class Storage {
         return this.storage;
     }
 
-    public void getGoodsByType(String type, final ListView products) {
+    public void getGoodsByType(String type, final ListView products, final TextView totalTV) {
         Document query = new Document();
         query.append("type", type);
         query.append("count", new Document("$gt", 0));
@@ -175,7 +175,7 @@ public class Storage {
                         newProduct.setPrice(product.getDouble("price"));
                         availableProducts.add(newProduct);
                     }
-                    products.setAdapter(new GoodsListAdapter(context, availableProducts));
+                    products.setAdapter(new GoodsListAdapter(context, availableProducts, totalTV));
                 }
                 return null;
             }

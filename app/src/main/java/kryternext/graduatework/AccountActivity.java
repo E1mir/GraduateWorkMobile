@@ -121,6 +121,7 @@ public class AccountActivity extends AppCompatActivity
                 public void onClick(View view) {
                     Intent intent = new Intent(AccountActivity.this, NewOrder.class);
                     intent.putExtra("accountType", user.getType());
+                    intent.putExtra("accountBalance", user.getBalance());
                     startActivity(intent);
                     //timestamp = new Timestamp(System.currentTimeMillis());
                     //timestamp.getTime();
