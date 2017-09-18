@@ -20,10 +20,12 @@ import java.util.ArrayList;
 import java.util.Collections;
 import java.util.LinkedList;
 import java.util.List;
+import java.util.Map;
 
 import kryternext.graduatework.AccountActivity;
 import kryternext.graduatework.app.adapters.GoodsListAdapter;
 import kryternext.graduatework.app.services.DatabaseController;
+import kryternext.graduatework.app.services.StringUtils;
 
 /**
  * This is storage class, which using for interact application with database.
@@ -156,7 +158,7 @@ public class Storage {
         return this.storage;
     }
 
-    public void getGoodsByType(String type, final ListView products, final TextView totalTV) {
+    public void getGoodsByType(String type, final ListView products, final TextView totalTV, final Map<String, String> map) {
         Document query = new Document();
         query.append("type", type);
         query.append("count", new Document("$gt", 0));
@@ -175,11 +177,32 @@ public class Storage {
                         newProduct.setPrice(product.getDouble("price"));
                         availableProducts.add(newProduct);
                     }
-                    products.setAdapter(new GoodsListAdapter(context, availableProducts, totalTV));
+                    products.setAdapter(new GoodsListAdapter(context, availableProducts, totalTV, map));
                 }
                 return null;
             }
         });
+    }
+
+    public void order(Order order) {
+        Document newOrder = new Document();
+        newOrder.append("order_id", order.getOrderTimestamp());
+        newOrder.append("account", order.getUser().getUsername().toLowerCase());
+        newOrder.append("total_cost", order.getCost());
+        newOrder.append("date", StringUtils.getDateFromTimestamp(order.getOrderTimestamp()));
+        newOrder.append("status", "Awaiting confirmation");
+        List<Document> orderedProducts = new ArrayList<>();
+        for (Map.Entry<String, String> pair : order.getProducts().entrySet()) {
+            Document query = new Document("name", pair.getKey());
+            String[] productData = pair.getValue().split("-");
+            int selectedCount = Integer.parseInt(productData[0]);
+            int productCount = Integer.parseInt(productData[1]);
+            this.storage.save("warehouse", query, new Document("count", productCount));
+            orderedProducts.add(new Document(pair.getKey(), selectedCount));
+        }
+        newOrder.append("order", orderedProducts);
+        this.storage.insert("orders", newOrder);
+        activity.finish();
     }
 
     public void setActivity(AppCompatActivity activity) {

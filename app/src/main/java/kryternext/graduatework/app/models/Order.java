@@ -10,7 +10,7 @@ public class Order {
     private String confirmedDate;
     private User user;
     private double cost;
-    public static Map<String, Integer> order = new HashMap<>();
+    public Map<String, String> orderProductList = new HashMap<>();
     private boolean isConfirmed;
 
     public Order() {
@@ -46,5 +46,9 @@ public class Order {
 
     public void setConfirmed(boolean isConfirmed) {
         this.isConfirmed = isConfirmed;
+    }
+
+    public Map<String, String> getProducts() {
+        return this.orderProductList;
     }
 }

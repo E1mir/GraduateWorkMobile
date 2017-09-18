@@ -85,7 +85,8 @@ public class DatabaseController implements MongoDB {
     }
 
     public void save(String collection, Document query, Document updDocument) {
-        this.database.getCollection(collection).updateOne(query, updDocument);
+        Document set = new Document("$set", updDocument);
+        this.database.getCollection(collection).updateOne(query, set);
     }
 
     public Task<Integer> getCountByQuery(String collection, Document query) {

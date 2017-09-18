@@ -5,7 +5,6 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.design.widget.FloatingActionButton;
-import android.support.design.widget.Snackbar;
 import android.support.v7.app.AlertDialog;
 import android.view.View;
 import android.support.design.widget.NavigationView;
@@ -33,7 +32,6 @@ public class AccountActivity extends AppCompatActivity
     private TextView email;
     private MenuItem balance;
     private User user;
-    private Timestamp timestamp;
     private RelativeLayout mainGreeting;
     private TableLayout accountInfo;
 
@@ -120,12 +118,8 @@ public class AccountActivity extends AppCompatActivity
                 @Override
                 public void onClick(View view) {
                     Intent intent = new Intent(AccountActivity.this, NewOrder.class);
-                    intent.putExtra("accountType", user.getType());
-                    intent.putExtra("accountBalance", user.getBalance());
+                    intent.putExtra("USER", user);
                     startActivity(intent);
-                    //timestamp = new Timestamp(System.currentTimeMillis());
-                    //timestamp.getTime();
-                    //Snackbar.make(view, String.valueOf(timestamp), Snackbar.LENGTH_LONG).setAction("Action", null).show();
                 }
             });
         } else if (id == R.id.nav_logout) {

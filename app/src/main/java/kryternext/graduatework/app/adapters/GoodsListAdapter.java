@@ -12,9 +12,9 @@ import android.widget.TextView;
 
 import java.util.List;
 import java.util.Locale;
+import java.util.Map;
 
 import kryternext.graduatework.R;
-import kryternext.graduatework.app.models.Order;
 import kryternext.graduatework.app.models.Product;
 
 public class GoodsListAdapter extends BaseAdapter {
@@ -22,10 +22,12 @@ public class GoodsListAdapter extends BaseAdapter {
     private TextView totalTV;
     private List<Product> products;
     private static LayoutInflater inflater = null;
+    private Map<String, String> orderProductList;
 
-    public GoodsListAdapter(Context context, List<Product> products, TextView totalTV) {
+    public GoodsListAdapter(Context context, List<Product> products, TextView totalTV, Map<String, String> orderProductList) {
         this.context = context;
         this.products = products;
+        this.orderProductList = orderProductList;
         inflater = (LayoutInflater) context.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
         this.totalTV = totalTV;
     }
@@ -75,9 +77,12 @@ public class GoodsListAdapter extends BaseAdapter {
                     selectedCountTV.setText(String.valueOf(--selectedCount));
                     totalCount -= product.getPrice();
                     totalTV.setText(String.format(Locale.ENGLISH, "Total: %.2f", totalCount));
-                    Order.order.put(product.getProductName(), selectedCount);
+                    if (selectedCount != 0) {
+                        orderProductList.put(product.getProductName(), String.format(Locale.ENGLISH, "%d-%d", selectedCount, productCount));
+                    } else {
+                        orderProductList.remove(product.getProductName());
+                    }
                 } else {
-                    Order.order.remove(product.getProductName());
                     Snackbar.make(view, "Count is 0", Snackbar.LENGTH_LONG).setAction("Action", null).show();
                 }
             }
@@ -95,7 +100,7 @@ public class GoodsListAdapter extends BaseAdapter {
                     selectedCountTV.setText(String.valueOf(++selectedCount));
                     totalCount += product.getPrice();
                     totalTV.setText(String.format(Locale.ENGLISH, "Total: %.2f", totalCount));
-                    Order.order.put(product.getProductName(), selectedCount);
+                    orderProductList.put(product.getProductName(), String.format(Locale.ENGLISH, "%d-%d", selectedCount, productCount));
                 } else {
                     Snackbar.make(view, "Maximal product count reached!", Snackbar.LENGTH_LONG).setAction("Action", null).show();
                 }
