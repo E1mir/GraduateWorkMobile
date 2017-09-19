@@ -10,7 +10,7 @@ import java.util.Locale;
 public class StringUtils {
     public static String getDateFromTimestamp(String timestamp) {
         try {
-            return new SimpleDateFormat("dd-MM-yyyy h:m:s", Locale.US).format(new SimpleDateFormat("s", Locale.US).parse(timestamp));
+            return new SimpleDateFormat("dd-MM-yyyy HH:mm:SS", Locale.US).format(new SimpleDateFormat("s", Locale.US).parse(timestamp));
         } catch (ParseException e) {
             Log.e("DATE PARSING", e.getMessage());
             return null;
@@ -19,11 +19,15 @@ public class StringUtils {
 
     public static String getDateFromTimestamp(long timestamp) {
         try {
-            String ts = String.valueOf(timestamp);
-            return new SimpleDateFormat("dd-MM-yyyy h:m:s", Locale.US).format(new SimpleDateFormat("s", Locale.US).parse(ts));
+            if (timestamp != 0) {
+                String ts = String.valueOf(timestamp);
+                return new SimpleDateFormat("dd-MM-yyyy HH:mm:SS", Locale.US).format(new SimpleDateFormat("s", Locale.US).parse(ts));
+            } else {
+                return "";
+            }
         } catch (ParseException e) {
             Log.e("DATE PARSING", e.getMessage());
-            return null;
+            return "";
         }
     }
 

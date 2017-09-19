@@ -55,6 +55,7 @@ public class NewOrder extends AppCompatActivity {
             return;
         }
         if (totalValue <= balance) {
+            user.setBalance(balance - totalValue);
             order.setUser(user);
             order.setCost(totalValue);
             order.setOrderTimestamp((System.currentTimeMillis() / 1000) + 14400);

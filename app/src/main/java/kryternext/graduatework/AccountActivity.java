@@ -15,14 +15,15 @@ import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.widget.ListView;
 import android.widget.RelativeLayout;
 import android.widget.TableLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import java.sql.Timestamp;
 import java.util.Locale;
 
+import kryternext.graduatework.app.models.Storage;
 import kryternext.graduatework.app.models.User;
 import kryternext.graduatework.app.services.StringUtils;
 
@@ -34,16 +35,22 @@ public class AccountActivity extends AppCompatActivity
     private User user;
     private RelativeLayout mainGreeting;
     private TableLayout accountInfo;
+    private ListView ordersLV;
+    private Storage storage;
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_account);
         user = (User) getIntent().getSerializableExtra("USER");
+        storage = new Storage(this, "wms");
+        storage.setActivity(this);
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
+        setSupportActionBar(toolbar);
         mainGreeting = (RelativeLayout) findViewById(R.id.main_content_layout);
         accountInfo = (TableLayout) findViewById(R.id.account_content_layout);
-        setSupportActionBar(toolbar);
+        ordersLV = (ListView) findViewById(R.id.orders_content_layout);
         FloatingActionButton fab = (FloatingActionButton) findViewById(R.id.fab);
         fab.hide();
         DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
@@ -62,6 +69,13 @@ public class AccountActivity extends AppCompatActivity
     }
 
     @Override
+    public boolean onCreateOptionsMenu(Menu menu) {
+        // Inflate the menu; this adds items to the action bar if it is present.
+        getMenuInflater().inflate(R.menu.account, menu);
+        return true;
+    }
+
+    @Override
     public void onBackPressed() {
         DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
         if (drawer.isDrawerOpen(GravityCompat.START)) {
@@ -75,6 +89,23 @@ public class AccountActivity extends AppCompatActivity
         balance.setTitle(String.format(Locale.ENGLISH, "Balance: %.2f $", user.getBalance()));
         greeting.setText(String.format("Welcome %s", user.getUsername()));
         email.setText(user.getEmail());
+        this.storage.refreshPage(user.getUsername().toLowerCase());
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        // Handle action bar item clicks here. The action bar will
+        // automatically handle clicks on the Home/Up button, so long
+        // as you specify a parent activity in AndroidManifest.xml.
+        int id = item.getItemId();
+
+        //noinspection SimplifiableIfStatement
+        if (id == R.id.refresh) {
+            this.storage.refreshPage(user.getUsername().toLowerCase());
+            return true;
+        }
+
+        return super.onOptionsItemSelected(item);
     }
 
     @SuppressWarnings("StatementWithEmptyBody")
@@ -87,33 +118,15 @@ public class AccountActivity extends AppCompatActivity
             // Handle the camera action
             return false;
         } else if (id == R.id.nav_info) {
-            //LinearLayout accountInfoLayout = (LinearLayout) findViewById(R.id.account_information_content_layout);
             mainGreeting.setVisibility(RelativeLayout.INVISIBLE);
             accountInfo.setVisibility(TableLayout.VISIBLE);
-            String username = user.getUsername();
-            String email = user.getEmail();
-            String shop = user.getShopName();
-            String type = user.getType();
-            String orders = "0";
-            String balance = String.format(Locale.ENGLISH, "%.2f $", user.getBalance());
-            TextView usernameTV = (TextView) findViewById(R.id.account_username_USER);
-            TextView emailTV = (TextView) findViewById(R.id.account_email_USER);
-            TextView shopTV = (TextView) findViewById(R.id.account_shop_USER);
-            TextView typeTV = (TextView) findViewById(R.id.account_type_USER);
-            TextView ordersTV = (TextView) findViewById(R.id.account_orders_USER);
-            TextView balanceTV = (TextView) findViewById(R.id.account_balance_USER);
-            usernameTV.setText(getFormattedText("Username", username));
-            emailTV.setText(getFormattedText("Email", email));
-            shopTV.setText(getFormattedText("Shop", shop));
-            typeTV.setText(getFormattedText("Type", type));
-            ordersTV.setText(getFormattedText("Orders", orders));
-            balanceTV.setText(balance);
+            ordersLV.setVisibility(ListView.INVISIBLE);
             fab.hide();
         } else if (id == R.id.nav_orders) {
             accountInfo.setVisibility(TableLayout.INVISIBLE);
             mainGreeting.setVisibility(RelativeLayout.INVISIBLE);
+            ordersLV.setVisibility(ListView.VISIBLE);
             fab.show();
-
             fab.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View view) {

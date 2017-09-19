@@ -1,17 +1,15 @@
 package kryternext.graduatework.app.models;
 
+import java.io.Serializable;
 import java.util.HashMap;
 import java.util.Map;
 
-public class Order {
+public class Order implements Serializable {
     private long orderTimestamp;
-    private long confirmTimestamp;
-    private String orderDate;
-    private String confirmedDate;
+    private String username;
     private User user;
     private double cost;
     public Map<String, String> orderProductList = new HashMap<>();
-    private boolean isConfirmed;
 
     public Order() {
     }
@@ -40,15 +38,16 @@ public class Order {
         this.cost = cost;
     }
 
-    public boolean isConfirmed() {
-        return isConfirmed;
-    }
-
-    public void setConfirmed(boolean isConfirmed) {
-        this.isConfirmed = isConfirmed;
-    }
-
     public Map<String, String> getProducts() {
         return this.orderProductList;
     }
+
+    public String getUsername() {
+        return username;
+    }
+
+    public void setUsername(String username) {
+        this.username = username;
+    }
+
 }

@@ -1,6 +1,7 @@
 package kryternext.graduatework.app.models;
 
 import java.io.Serializable;
+import java.util.ArrayList;
 
 public class User implements Serializable {
     private String username;
@@ -9,6 +10,8 @@ public class User implements Serializable {
     private String type;
     private double balance;
     private String password;
+    private int orderCount;
+    private ArrayList<String> orders;
 
     public User() {
     }
@@ -57,6 +60,14 @@ public class User implements Serializable {
         this.password = UserAuth.encryptPass(password);
     }
 
+    public int getOrderCount() {
+        return orderCount;
+    }
+
+    public void setOrderCount(int orderCount) {
+        this.orderCount = orderCount;
+    }
+
     public String getPassword() {
         return password;
     }
@@ -64,5 +75,13 @@ public class User implements Serializable {
     @Override
     public String toString() {
         return String.format("%s - %s", username, email);
+    }
+
+    public ArrayList<String> getOrders() {
+        return orders;
+    }
+
+    public void setOrders(ArrayList<String> orders) {
+        this.orders = orders;
     }
 }

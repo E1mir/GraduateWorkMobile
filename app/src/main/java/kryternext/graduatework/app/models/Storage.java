@@ -3,11 +3,15 @@ package kryternext.graduatework.app.models;
 import android.content.Context;
 import android.content.Intent;
 import android.support.annotation.NonNull;
+import android.support.design.widget.NavigationView;
 import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
+import android.view.Menu;
+import android.view.MenuItem;
 import android.widget.ArrayAdapter;
 import android.widget.ListView;
 import android.widget.Spinner;
+import android.widget.TableLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -20,9 +24,11 @@ import java.util.ArrayList;
 import java.util.Collections;
 import java.util.LinkedList;
 import java.util.List;
+import java.util.Locale;
 import java.util.Map;
 
 import kryternext.graduatework.AccountActivity;
+import kryternext.graduatework.R;
 import kryternext.graduatework.app.adapters.GoodsListAdapter;
 import kryternext.graduatework.app.services.DatabaseController;
 import kryternext.graduatework.app.services.StringUtils;
@@ -191,18 +197,84 @@ public class Storage {
         newOrder.append("total_cost", order.getCost());
         newOrder.append("date", StringUtils.getDateFromTimestamp(order.getOrderTimestamp()));
         newOrder.append("status", "Awaiting confirmation");
+        newOrder.append("confirm_timestamp", 0L);
         List<Document> orderedProducts = new ArrayList<>();
         for (Map.Entry<String, String> pair : order.getProducts().entrySet()) {
             Document query = new Document("name", pair.getKey());
             String[] productData = pair.getValue().split("-");
-            int selectedCount = Integer.parseInt(productData[0]);
             int productCount = Integer.parseInt(productData[1]);
             this.storage.save("warehouse", query, new Document("count", productCount));
-            orderedProducts.add(new Document(pair.getKey(), selectedCount));
+            orderedProducts.add(new Document().append("name", pair.getKey()).append("count", pair.getValue()));
         }
+        Document account = new Document("username", order.getUser().getUsername().toLowerCase());
+        this.storage.save("accounts", account, new Document("balance", order.getUser().getBalance()));
         newOrder.append("order", orderedProducts);
         this.storage.insert("orders", newOrder);
         activity.finish();
+    }
+
+    public void refreshPage(String username) {
+        User user = new User();
+        Document query = new Document();
+        query.append("username", username);
+        final TableLayout account = (TableLayout) this.activity.findViewById(R.id.account_content_layout);
+        final NavigationView navigationView = (NavigationView) this.activity.findViewById(R.id.nav_view);
+
+        this.storage.getCollection("accounts").find(query).continueWith(new Continuation<List<Document>, Object>() {
+            @Override
+            public Object then(@NonNull Task<List<Document>> task) throws Exception {
+                if (task.isSuccessful()) {
+                    Document accountDoc = task.getResult().get(0);
+                    TextView usernameTV = (TextView) account.findViewById(R.id.account_username_USER);
+                    TextView emailTV = (TextView) account.findViewById(R.id.account_email_USER);
+                    TextView shopTV = (TextView) account.findViewById(R.id.account_shop_USER);
+                    TextView typeTV = (TextView) account.findViewById(R.id.account_type_USER);
+                    TextView balanceTV = (TextView) account.findViewById(R.id.account_balance_USER);
+                    Menu menu = navigationView.getMenu();
+                    MenuItem balanceNav = menu.findItem(R.id.nav_balance);
+                    usernameTV.setText(getFormattedText("Username", accountDoc.getString("username")));
+                    emailTV.setText(getFormattedText("Email", accountDoc.getString("email")));
+                    shopTV.setText(getFormattedText("Shop", accountDoc.getString("shop_name")));
+                    typeTV.setText(getFormattedText("Type", accountDoc.getString("type")));
+                    balanceTV.setText(String.format(Locale.ENGLISH, "%.2f $", accountDoc.getDouble("balance")));
+                    balanceNav.setTitle(String.format(Locale.ENGLISH, "%.2f $", accountDoc.getDouble("balance")));
+                }
+                return null;
+            }
+        });
+        final ListView ordersLV = (ListView) this.activity.findViewById(R.id.orders_content_layout);
+        this.storage.getCollection("orders").find(new Document("account", username)).continueWith(new Continuation<List<Document>, Object>() {
+            @Override
+            public Object then(@NonNull Task<List<Document>> task) throws Exception {
+                if (task.isSuccessful()) {
+                    List<Document> orders = task.getResult();
+                    TextView ordersTV = (TextView) Storage.this.activity.findViewById(R.id.account_orders_USER);
+                    ordersTV.setText(getFormattedText("Orders", String.valueOf(orders.size())));
+                    ArrayList<String> orderList = new ArrayList<String>();
+                    for (int i = 0; i < orders.size(); i++) {
+                        int index = i + 1;
+                        try {
+                            Long orderID = orders.get(i).getLong("order_id");
+                            Long confirmTimestamp = orders.get(i).getLong("confirm_timestamp");
+                            String orderDate = StringUtils.getDateFromTimestamp(orderID);
+                            String confirmDate = StringUtils.getDateFromTimestamp(confirmTimestamp);
+                            String status = orders.get(i).getString("status");
+                            if (!confirmDate.isEmpty()) {
+                                status += " at " + confirmDate;
+                            }
+                            Double totalCost = orders.get(i).getDouble("total_cost");
+                            orderList.add(String.format(Locale.ENGLISH, "%d: %d %s %s    %.2f $", index, orderID, orderDate, status, totalCost));
+                        } catch (Exception e) {
+                            Log.e("ERROR", e.getMessage());
+                        }
+                    }
+                    ArrayAdapter<String> arrayAdapter = new ArrayAdapter<String>(Storage.this.context, android.R.layout.simple_list_item_1, orderList);
+                    ordersLV.setAdapter(arrayAdapter);
+                }
+                return null;
+            }
+        });
+
     }
 
     public void setActivity(AppCompatActivity activity) {
@@ -215,5 +287,9 @@ public class Storage {
 
     private void alert(String message) {
         Toast.makeText(context, String.format("%s has already taken!", message), Toast.LENGTH_SHORT).show();
+    }
+
+    private String getFormattedText(String field, String text) {
+        return String.format("%s: %s", field, StringUtils.getCapitalizedText(text));
     }
 }
