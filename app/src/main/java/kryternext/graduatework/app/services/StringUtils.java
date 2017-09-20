@@ -5,6 +5,7 @@ import android.util.Log;
 
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
+import java.util.ArrayList;
 import java.util.Locale;
 
 public class StringUtils {
@@ -37,4 +38,12 @@ public class StringUtils {
         return builder.toString();
     }
 
+    public static ArrayList<String> getListFromStringSplit(String text, String split) {
+        ArrayList<String> list = new ArrayList<>();
+        for (String str : text.split(split)) {
+            String clear = str.trim();
+            if (!clear.isEmpty()) list.add(clear);
+        }
+        return list;
+    }
 }

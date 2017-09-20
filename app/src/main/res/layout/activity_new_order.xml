@@ -13,16 +13,41 @@
         android:layout_height="0dp"
         android:layout_weight="0.7">
 
-        <EditText
-            android:id="@+id/search_text"
+        <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_marginEnd="16dp"
-            android:layout_centerVertical="true"
-            android:layout_marginStart="16dp"
-            android:layout_marginTop="16dp"
-            android:drawableEnd="@drawable/ic_search"
-            android:hint="@string/search" />
+            android:orientation="horizontal">
+
+            <EditText
+                android:id="@+id/search_text"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_marginEnd="16dp"
+                android:layout_marginStart="16dp"
+                android:layout_marginTop="16dp"
+                android:layout_weight="1"
+                android:hint="@string/search" />
+
+            <Spinner
+                android:id="@+id/search_category"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center_vertical"
+                android:layout_marginTop="10dp"
+                android:layout_weight="0.7">
+
+            </Spinner>
+
+            <Button
+                android:id="@+id/search_button"
+                android:layout_width="0dp"
+                android:onClick="search"
+                android:layout_height="wrap_content"
+                android:layout_marginEnd="16dp"
+                android:layout_marginTop="16dp"
+                android:layout_weight="0.3"
+                android:drawableEnd="@drawable/ic_search" />
+        </LinearLayout>
     </RelativeLayout>
 
 

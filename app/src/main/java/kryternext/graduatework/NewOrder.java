@@ -2,11 +2,10 @@ package kryternext.graduatework;
 
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
-import android.text.Editable;
-import android.text.TextWatcher;
 import android.view.View;
 import android.widget.EditText;
 import android.widget.ListView;
+import android.widget.Spinner;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -22,7 +21,9 @@ public class NewOrder extends AppCompatActivity {
     private User user;
     private TextView totalTV;
     private EditText searchET;
+    private Spinner categorySP;
     private Order order;
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -35,37 +36,15 @@ public class NewOrder extends AppCompatActivity {
         availableGoods = (ListView) findViewById(R.id.goods_list);
         totalTV = (TextView) findViewById(R.id.totalPrice);
         searchET = (EditText) findViewById(R.id.search_text);
+        categorySP = (Spinner) findViewById(R.id.search_category);
         totalTV.setText(String.format(Locale.ENGLISH, "Total: %d", 0));
         initList();
-        searchET.addTextChangedListener(new TextWatcher() {
 
-            @Override
-            public void beforeTextChanged(CharSequence s, int start, int count, int after) {
-            }
-
-            @Override
-            public void onTextChanged(CharSequence s, int start, int before, int count) {
-                if (s.toString().equals("")) {
-                    initList();
-                } else {
-                    search(s.toString());
-                }
-            }
-
-            @Override
-            public void afterTextChanged(Editable s) {
-            }
-
-        });
     }
 
     public void initList() {
-        this.storage.getGoodsByType(this.user.getType(), this.availableGoods, this.totalTV, this.order.orderProductList, null);
-    }
-
-    public void search(String searchText) {
-        this.storage.getGoodsByType(this.user.getType(), this.availableGoods, this.totalTV, this.order.orderProductList, searchText.toLowerCase());
-
+        this.storage.getCategoriesByType(user.getType(), categorySP);
+        this.storage.getGoodsByType(user.getType(), availableGoods, totalTV, order.orderProductList, null, null);
     }
 
     public void order(View view) {
@@ -86,4 +65,23 @@ public class NewOrder extends AppCompatActivity {
             Toast.makeText(this, String.format(Locale.ENGLISH, "Not enough money: %.2f$", (balance - totalValue)), Toast.LENGTH_SHORT).show();
     }
 
+    public void search(View view) {
+        String searchTxt = searchET.getText().toString().toLowerCase().trim();
+        String category = categorySP.getSelectedItem().toString().toLowerCase().trim();
+        if (searchTxt.isEmpty() && category.equals("category:")) {
+            this.storage.getGoodsByType(user.getType(), availableGoods, totalTV, order.orderProductList, null, null);
+            return;
+        }
+        if (!searchTxt.isEmpty() && category.equals("category:")) {
+            this.storage.getGoodsByType(user.getType(), availableGoods, totalTV, order.orderProductList, searchTxt, null);
+            return;
+        }
+        if (!category.equals("category:") && searchTxt.isEmpty()) {
+            this.storage.getGoodsByType(user.getType(), availableGoods, totalTV, order.orderProductList, null, category);
+            return;
+        }
+        if (!searchTxt.isEmpty() && !category.equals("category:")) {
+            this.storage.getGoodsByType(user.getType(), availableGoods, totalTV, order.orderProductList, searchTxt, category);
+        }
+    }
 }

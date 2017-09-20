@@ -1,7 +1,9 @@
 package kryternext.graduatework.app.adapters;
 
 
+import android.app.AlertDialog;
 import android.content.Context;
+import android.content.DialogInterface;
 import android.support.design.widget.Snackbar;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -55,6 +57,21 @@ public class GoodsListAdapter extends BaseAdapter {
             productRow = inflater.inflate(R.layout.product_row, parent, false);
         // TextView totalPriceTV = (TextView) ;
         TextView nameTV = (TextView) productRow.findViewById(R.id.productName);
+        nameTV.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                AlertDialog alertDialog = new AlertDialog.Builder(v.getContext()).create();
+                alertDialog.setTitle(product.getProductName());
+                alertDialog.setMessage(product.getProductDescription());
+                alertDialog.setButton(AlertDialog.BUTTON_NEUTRAL, "OK",
+                        new DialogInterface.OnClickListener() {
+                            public void onClick(DialogInterface dialog, int which) {
+                                dialog.dismiss();
+                            }
+                        });
+                alertDialog.show();
+            }
+        });
         TextView priceTV = (TextView) productRow.findViewById(R.id.productPrice);
         final TextView countTV = (TextView) productRow.findViewById(R.id.productCount);
         final TextView selectedCountTV = (TextView) productRow.findViewById(R.id.productSelectedCount);

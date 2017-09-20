@@ -164,7 +164,27 @@ public class Storage {
         return this.storage;
     }
 
-    public void getGoodsByType(String type, final ListView products, final TextView totalTV, final Map<String, String> map, final String searchText) {
+    public void getCategoriesByType(String type, final Spinner categories) {
+        this.storage.getCollection("types").find(new Document("name", type)).continueWith(new Continuation<List<Document>, Object>() {
+            @Override
+            public Object then(@NonNull Task<List<Document>> task) throws Exception {
+                if (task.isSuccessful()) {
+                    Document typesDoc = task.getResult().get(0);
+                    String categoriesStr = typesDoc.getString("categories");
+                    ArrayList<String> categoriesList = StringUtils.getListFromStringSplit(categoriesStr, ",");
+                    Collections.sort(categoriesList);
+                    categoriesList.add(0, "Category:");
+                    ArrayAdapter<String> dataAdapter = new ArrayAdapter<>(context, android.R.layout.simple_spinner_item, categoriesList);
+                    dataAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+                    categories.setAdapter(dataAdapter);
+                    return null;
+                }
+                return null;
+            }
+        });
+    }
+
+    public void getGoodsByType(String type, final ListView products, final TextView totalTV, final Map<String, String> map, final String searchText, final String searchCategory) {
         Document query = new Document();
         query.append("type", type);
         query.append("count", new Document("$gt", 0));
@@ -179,6 +199,11 @@ public class Storage {
                         newProduct.setProductName(product.getString("name"));
                         if (searchText != null) {
                             if (!newProduct.getProductName().toLowerCase().contains(searchText))
+                                continue;
+                        }
+                        newProduct.setCategory(product.getString("category"));
+                        if (searchCategory != null) {
+                            if (!newProduct.getCategory().toLowerCase().contains(searchCategory))
                                 continue;
                         }
                         newProduct.setProductType(product.getString("type"));
