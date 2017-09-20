@@ -164,7 +164,7 @@ public class Storage {
         return this.storage;
     }
 
-    public void getGoodsByType(String type, final ListView products, final TextView totalTV, final Map<String, String> map) {
+    public void getGoodsByType(String type, final ListView products, final TextView totalTV, final Map<String, String> map, final String searchText) {
         Document query = new Document();
         query.append("type", type);
         query.append("count", new Document("$gt", 0));
@@ -177,6 +177,10 @@ public class Storage {
                     for (Document product : warehouse) {
                         Product newProduct = new Product();
                         newProduct.setProductName(product.getString("name"));
+                        if (searchText != null) {
+                            if (!newProduct.getProductName().toLowerCase().contains(searchText))
+                                continue;
+                        }
                         newProduct.setProductType(product.getString("type"));
                         newProduct.setProductDescription(product.getString("description"));
                         newProduct.setCount(product.getInteger("count"));

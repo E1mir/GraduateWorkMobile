@@ -35,4 +35,6 @@
     <string name="plus">+</string>
     <string name="minus">-</string>
     <string name="refresh">Refresh</string>
+    <string name="search">Search</string>
+    <string name="order">Order</string>
 </resources>
