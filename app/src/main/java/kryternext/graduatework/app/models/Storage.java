@@ -188,6 +188,13 @@ public class Storage {
         Document query = new Document();
         query.append("type", type);
         query.append("count", new Document("$gt", 0));
+
+        if (searchText != null) {
+            query.append("name", StringUtils.getCapitalizedText(searchText));
+        }
+        if (searchCategory != null) {
+            query.append("category", StringUtils.getCapitalizedText(searchCategory));
+        }
         this.storage.getCollection("warehouse").find(query).continueWith(new Continuation<List<Document>, Object>() {
             @Override
             public Object then(@NonNull Task<List<Document>> task) throws Exception {
@@ -197,15 +204,7 @@ public class Storage {
                     for (Document product : warehouse) {
                         Product newProduct = new Product();
                         newProduct.setProductName(product.getString("name"));
-                        if (searchText != null) {
-                            if (!newProduct.getProductName().toLowerCase().contains(searchText))
-                                continue;
-                        }
                         newProduct.setCategory(product.getString("category"));
-                        if (searchCategory != null) {
-                            if (!newProduct.getCategory().toLowerCase().contains(searchCategory))
-                                continue;
-                        }
                         newProduct.setProductType(product.getString("type"));
                         newProduct.setProductDescription(product.getString("description"));
                         newProduct.setCount(product.getInteger("count"));
