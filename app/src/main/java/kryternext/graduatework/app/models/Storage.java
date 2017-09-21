@@ -84,7 +84,7 @@ public class Storage {
                         return false;
                     }
                 } else {
-                    showMessage(context);
+                    Toast.makeText(Storage.this.context, "SOMETHING WENT WRONG!", Toast.LENGTH_LONG).show();
                     Log.e(TAG, "Something went wrong!");
                     return false;
                 }
