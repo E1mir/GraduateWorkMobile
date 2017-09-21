@@ -17,8 +17,11 @@ import android.widget.Toast;
 
 import com.google.android.gms.tasks.Continuation;
 import com.google.android.gms.tasks.Task;
+import com.mongodb.client.model.Filters;
 
 import org.bson.Document;
+import org.bson.conversions.Bson;
+
 
 import java.util.ArrayList;
 import java.util.Collections;
@@ -26,6 +29,7 @@ import java.util.LinkedList;
 import java.util.List;
 import java.util.Locale;
 import java.util.Map;
+import java.util.regex.Pattern;
 
 import kryternext.graduatework.AccountActivity;
 import kryternext.graduatework.R;
@@ -184,14 +188,10 @@ public class Storage {
         });
     }
 
-    public void getGoodsByType(String type, final ListView products, final TextView totalTV, final Map<String, String> map, final String searchText, final String searchCategory) {
+    public void getGoodsByType(String type, final ListView products, final TextView totalTV, final Map<String, String> map, final String searchText, String searchCategory) {
         Document query = new Document();
         query.append("type", type);
         query.append("count", new Document("$gt", 0));
-
-        if (searchText != null) {
-            query.append("name", StringUtils.getCapitalizedText(searchText));
-        }
         if (searchCategory != null) {
             query.append("category", StringUtils.getCapitalizedText(searchCategory));
         }
@@ -204,6 +204,10 @@ public class Storage {
                     for (Document product : warehouse) {
                         Product newProduct = new Product();
                         newProduct.setProductName(product.getString("name"));
+                        if (searchText != null) {
+                            if (!newProduct.getProductName().toLowerCase().contains(searchText))
+                                continue;
+                        }
                         newProduct.setCategory(product.getString("category"));
                         newProduct.setProductType(product.getString("type"));
                         newProduct.setProductDescription(product.getString("description"));

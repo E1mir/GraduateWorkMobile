@@ -1,5 +1,7 @@
 package kryternext.graduatework;
 
+import android.app.AlertDialog;
+import android.content.DialogInterface;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.view.View;
@@ -10,6 +12,7 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import java.util.Locale;
+import java.util.Map;
 
 import kryternext.graduatework.app.models.Order;
 import kryternext.graduatework.app.models.Storage;
@@ -67,21 +70,41 @@ public class NewOrder extends AppCompatActivity {
 
     public void search(View view) {
         String searchTxt = searchET.getText().toString().toLowerCase().trim();
-        String category = categorySP.getSelectedItem().toString().toLowerCase().trim();
-        if (searchTxt.isEmpty() && category.equals("category:")) {
+        String category = categorySP.getSelectedItem().toString().trim();
+        if (searchTxt.isEmpty() && category.equals("Category:")) {
             this.storage.getGoodsByType(user.getType(), availableGoods, totalTV, order.orderProductList, null, null);
             return;
         }
-        if (!searchTxt.isEmpty() && category.equals("category:")) {
+        if (!searchTxt.isEmpty() && category.equals("Category:")) {
             this.storage.getGoodsByType(user.getType(), availableGoods, totalTV, order.orderProductList, searchTxt, null);
             return;
         }
-        if (!category.equals("category:") && searchTxt.isEmpty()) {
+        if (!category.equals("Category:") && searchTxt.isEmpty()) {
             this.storage.getGoodsByType(user.getType(), availableGoods, totalTV, order.orderProductList, null, category);
             return;
         }
-        if (!searchTxt.isEmpty() && !category.equals("category:")) {
+        if (!searchTxt.isEmpty() && !category.equals("Category:")) {
             this.storage.getGoodsByType(user.getType(), availableGoods, totalTV, order.orderProductList, searchTxt, category);
         }
+    }
+
+    public void showOrderInfo(View view) {
+        AlertDialog alertDialog = new AlertDialog.Builder(view.getContext()).create();
+        alertDialog.setTitle("Order information");
+        String order = "";
+        int index = 0;
+        for (Map.Entry<String, String> pair : this.order.getProducts().entrySet()) {
+            index++;
+            int count = Integer.parseInt(pair.getValue().split("-")[0]);
+            order += String.format(Locale.ENGLISH, "%d: %s (%d)\n", index, pair.getKey(), count);
+        }
+        alertDialog.setMessage(order);
+        alertDialog.setButton(AlertDialog.BUTTON_NEUTRAL, "OK",
+                new DialogInterface.OnClickListener() {
+                    public void onClick(DialogInterface dialog, int which) {
+                        dialog.dismiss();
+                    }
+                });
+        alertDialog.show();
     }
 }

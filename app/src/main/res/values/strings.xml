@@ -37,4 +37,5 @@
     <string name="refresh">Refresh</string>
     <string name="search">Search</string>
     <string name="order">Order</string>
+    <string name="order_info">Order info</string>
 </resources>
